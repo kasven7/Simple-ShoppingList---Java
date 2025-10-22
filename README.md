@@ -1,4 +1,5 @@
 1. Description:
+   
       A robust back-end service designed to manage user authentication, groups, shared product catalogs, and real-time collaborative shopping lists.
     This API serves as the foundation for a modern web or mobile application where users can plan and track purchases together.
 
