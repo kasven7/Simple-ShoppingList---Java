@@ -12,7 +12,8 @@
    - Real-time Tracking: Features to track item quantity, mark items as checked, and record final purchase prices.
   
 4. Project Structure and Technology Stack:
-       The core development language is Java. All dependencies and the overall build lifecycle are managed by Maven, serving as the central build tool.
+   
+      The core development language is Java. All dependencies and the overall build lifecycle are managed by Maven, serving as the central build tool.
      For data persistence, the application utilizes JPA (Java Persistence API), with Hibernate acting as the underlying Object-Relational Mapping (ORM) framework,
      responsible for mapping the Java entities to the database tables. The data is stored in a relational database, which is typically configured to MySQL.
      The application logic is organized around a set of core Entities, which directly reflect the database schema.
