@@ -24,4 +24,8 @@ public class CategoryPanel extends JPanel {
         // załadowanie danych
         tableModel.loadData();
     }
+
+    public void reload() {
+        tableModel.loadData();
+    }
 }

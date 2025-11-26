@@ -1,5 +1,6 @@
 package UI;
 
+import UI.dialogs.AddCategoryDialog;
 import UI.menu.MainMenuBar;
 import UI.panels.CategoryPanel;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
+    private CategoryPanel categoryPanel;
 
     public MainWindow() {
         setTitle("Shopping List - GUI");
@@ -14,15 +16,22 @@ public class MainWindow extends JFrame {
         setSize(800, 600);
         setLocationRelativeTo(null);
 
-        // ustawienie layoutu
         setLayout(new BorderLayout());
 
-        // dodanie menu głównego
-        setJMenuBar(new MainMenuBar());
+        // Panel główny
+        categoryPanel = new CategoryPanel(AppContext.getProductCategory());
 
-        // Placeholder – na razie panel główny jest pusty
-        add(new JLabel("Witaj w aplikacji Shopping List!", SwingConstants.CENTER), BorderLayout.CENTER);
-        add(new CategoryPanel(AppContext.getProductCategory()), BorderLayout.CENTER);
+        // Menu z akcją
+        setJMenuBar(new MainMenuBar(e -> openAddCategoryDialog()));
 
+        add(categoryPanel, BorderLayout.CENTER);
+    }
+
+    private void openAddCategoryDialog() {
+        new AddCategoryDialog(
+                this,
+                AppContext.getProductCategory(),
+                () -> categoryPanel.reload()
+        ).setVisible(true);
     }
 }
