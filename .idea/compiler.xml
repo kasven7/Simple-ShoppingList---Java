@@ -8,7 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mysql-connector-j" />
+        <module name="lab1" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mysql-connector-j" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
