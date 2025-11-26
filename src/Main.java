@@ -1,31 +1,17 @@
-import Database.DBProperties;
-import Database.DatabaseConfig;
-import Model.ProductCategory;
+import UI.AppContext;
+import UI.MainWindow;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        DatabaseConfig.createConfigFile();
-        DatabaseConfig.readConfigFile();
 
-        try {
-            Connection conn = DriverManager.getConnection(
-                    DBProperties.getUrl(),
-                    DBProperties.getUser(),
-                    DBProperties.getPassword()
-            );
-            System.out.println("✅ Połączenie udane!");
+        // 1. Inicjalizacja bazy
+        AppContext.init();
 
-            ProductCategory productCategory = new ProductCategory(conn);
-            ConsoleApp app = new ConsoleApp(productCategory);
-
-            app.run();
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println("❌ Błąd połączenia: " + e.getMessage());
-        }
+        // 2. Start GUI
+        SwingUtilities.invokeLater(() -> {
+            new MainWindow().setVisible(true);
+        });
     }
 }

@@ -1,9 +1,8 @@
 package Model;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductCategory {
     private int id;
@@ -54,12 +53,24 @@ public class ProductCategory {
         try (Statement stmt = conn.createStatement()) {
             return stmt.executeUpdate(addSql);
         } catch (SQLException e) {
-//            System.out.println("SQL Exception: " + e.getMessage());
-//            System.out.println("SQL State: " + e.getSQLState());
-//            System.out.println("Error Code: " + e.getErrorCode());
-
             return 0;
         }
+    }
+
+    public List<String> getAll() {
+        List<String> result = new ArrayList<>();
+
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery("SELECT name FROM product_category");
+
+            while (rs.next()) {
+                result.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     public void readTable() {
@@ -87,10 +98,6 @@ public class ProductCategory {
             if (e.getErrorCode() == 1062) {  // duplicate key
                 return -1;
             }
-//            System.out.println("SQL Exception: " + e.getMessage());
-//            System.out.println("SQL State: " + e.getSQLState());
-//            System.out.println("Error Code: " + e.getErrorCode());
-
             return 0;
         }
     }
@@ -101,10 +108,6 @@ public class ProductCategory {
         try (Statement stmt = conn.createStatement()) {
             return stmt.executeUpdate(deleteSql);
         } catch (SQLException e) {
-//            System.out.println("SQL Exception: " + e.getMessage());
-//            System.out.println("SQL State: " + e.getSQLState());
-//            System.out.println("Error Code: " + e.getErrorCode());
-
             return 0;
         }
     }
