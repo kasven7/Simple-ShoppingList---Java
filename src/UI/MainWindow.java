@@ -1,5 +1,6 @@
 package UI;
 
+import UI.components.BottomStatusBar;
 import UI.dialogs.AddCategoryDialog;
 import UI.dialogs.EditCategoryDialog;
 import UI.menu.MainMenuBar;
@@ -11,6 +12,7 @@ import java.awt.*;
 public class MainWindow extends JFrame {
     private CategoryPanel categoryPanel;
     private MainMenuBar menuBar;
+    private BottomStatusBar statusBar;
 
     public MainWindow() {
         setTitle("Shopping List - GUI");
@@ -35,18 +37,18 @@ public class MainWindow extends JFrame {
         updateMenuState();
 
         add(categoryPanel, BorderLayout.CENTER);
+        statusBar = new BottomStatusBar();
+        add(statusBar, BorderLayout.SOUTH);
     }
 
     private void openAddCategoryDialog() {
-        new AddCategoryDialog(
-                this,
-                AppContext.getProductCategory(),
-                () -> {
-                    categoryPanel.reload();
-                    updateMenuState();
-                }
-        ).setVisible(true);
-    }
+    new AddCategoryDialog(
+            this,
+            AppContext.getProductCategory(),
+            () -> { categoryPanel.reload(); updateMenuState(); },
+            this::setStatus
+    ).setVisible(true);
+}
 
     private void updateMenuState() {
         menuBar.setCategoryActionsEnabled(categoryPanel.hasAnyCategory());
@@ -55,6 +57,7 @@ public class MainWindow extends JFrame {
     private void openEditCategoryDialog() {
         String selected = categoryPanel.getSelectedCategory();
         if (selected == null) {
+            setStatus("⚠️ Nie edytowano — nie wybrano kategorii.");
             JOptionPane.showMessageDialog(this, "Najpierw wybierz kategorię z tabeli!");
             return;
         }
@@ -63,16 +66,15 @@ public class MainWindow extends JFrame {
                 this,
                 AppContext.getProductCategory(),
                 selected,
-                () -> {
-                    categoryPanel.reload();
-                    updateMenuState();
-                }
+                () -> { categoryPanel.reload(); updateMenuState(); },
+                this::setStatus
         ).setVisible(true);
     }
 
     private void deleteSelectedCategory() {
         String selected = categoryPanel.getSelectedCategory();
         if (selected == null) {
+            setStatus("⚠️ Nie usunięto — nie wybrano kategorii.");
             JOptionPane.showMessageDialog(this, "Najpierw wybierz kategorię z tabeli!");
             return;
         }
@@ -85,16 +87,25 @@ public class MainWindow extends JFrame {
                 JOptionPane.WARNING_MESSAGE
         );
 
-        if (confirm != JOptionPane.OK_OPTION) return;
+        if (confirm != JOptionPane.OK_OPTION) {
+            setStatus("ℹ️ Anulowano usuwanie kategorii: " + selected);
+            return;
+        }
 
         int result = AppContext.getProductCategory().deleteRecord(selected);
 
         if (result > 0) {
             categoryPanel.reload();
             updateMenuState();
+            setStatus("🗑️ Usunięto kategorię: " + selected);
         } else {
+            setStatus("❌ Nie usunięto — nie znaleziono lub błąd: " + selected);
             JOptionPane.showMessageDialog(this, "Nie znaleziono kategorii lub nie udało się usunąć.");
         }
+    }
+
+    private void setStatus(String msg) {
+        statusBar.setMessage(msg);
     }
 
 }
