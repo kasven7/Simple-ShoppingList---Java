@@ -10,6 +10,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
     private CategoryPanel categoryPanel;
+    private MainMenuBar menuBar;
 
     public MainWindow() {
         setTitle("Shopping List - GUI");
@@ -23,11 +24,15 @@ public class MainWindow extends JFrame {
         categoryPanel = new CategoryPanel(AppContext.getProductCategory());
 
         // Menu z akcją
-        setJMenuBar(new MainMenuBar(
+        menuBar = new MainMenuBar(
                 e -> openAddCategoryDialog(),
                 e -> openEditCategoryDialog(),
                 e -> deleteSelectedCategory()
-        ));
+        );
+        setJMenuBar(menuBar);
+
+        // po starcie ustaw stan menu
+        updateMenuState();
 
         add(categoryPanel, BorderLayout.CENTER);
     }
@@ -36,8 +41,15 @@ public class MainWindow extends JFrame {
         new AddCategoryDialog(
                 this,
                 AppContext.getProductCategory(),
-                () -> categoryPanel.reload()
+                () -> {
+                    categoryPanel.reload();
+                    updateMenuState();
+                }
         ).setVisible(true);
+    }
+
+    private void updateMenuState() {
+        menuBar.setCategoryActionsEnabled(categoryPanel.hasAnyCategory());
     }
 
     private void openEditCategoryDialog() {
@@ -51,7 +63,10 @@ public class MainWindow extends JFrame {
                 this,
                 AppContext.getProductCategory(),
                 selected,
-                () -> categoryPanel.reload()
+                () -> {
+                    categoryPanel.reload();
+                    updateMenuState();
+                }
         ).setVisible(true);
     }
 
@@ -76,6 +91,7 @@ public class MainWindow extends JFrame {
 
         if (result > 0) {
             categoryPanel.reload();
+            updateMenuState();
         } else {
             JOptionPane.showMessageDialog(this, "Nie znaleziono kategorii lub nie udało się usunąć.");
         }

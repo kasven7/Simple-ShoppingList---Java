@@ -29,6 +29,10 @@ public class CategoryPanel extends JPanel {
         tableModel.loadData();
     }
 
+    public boolean hasAnyCategory() {
+        return tableModel.getRowCount() > 0;
+    }
+
     public String getSelectedCategory() {
         int row = table.getSelectedRow();
         if (row == -1) return null;
