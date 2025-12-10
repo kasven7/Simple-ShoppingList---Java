@@ -1,5 +1,6 @@
 import UI.AppContext;
 import UI.MainWindow;
+import UI.components.BottomStatusBar;
 
 import javax.swing.*;
 
