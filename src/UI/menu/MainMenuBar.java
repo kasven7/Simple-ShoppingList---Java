@@ -9,10 +9,12 @@ public class MainMenuBar extends JMenuBar {
 
     private final JMenuItem editItem;
     private final JMenuItem deleteItem;
+    private final JMenuItem addProductItem;
 
     public MainMenuBar(ActionListener onAddCategory,
                        ActionListener onEditCategory,
-                       ActionListener onDeleteCategory) {
+                       ActionListener onDeleteCategory,
+                       ActionListener onAddProduct) {
 
         int shortcutKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
@@ -36,6 +38,12 @@ public class MainMenuBar extends JMenuBar {
         deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, shortcutKey));
         deleteItem.addActionListener(onDeleteCategory);
 
+        addProductItem = new JMenuItem("Dodaj produkt");
+        addProductItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, shortcutKey));
+        addProductItem.addActionListener(onAddProduct);
+        operationsMenu.addSeparator();
+        operationsMenu.add(addProductItem);
+
         operationsMenu.add(addItem);
         operationsMenu.add(editItem);
         operationsMenu.add(deleteItem);
@@ -49,4 +57,6 @@ public class MainMenuBar extends JMenuBar {
         editItem.setEnabled(enabled);
         deleteItem.setEnabled(enabled);
     }
+
+    public void setProductActionsEnabled(boolean enabled) { addProductItem.setEnabled(enabled); }
 }
