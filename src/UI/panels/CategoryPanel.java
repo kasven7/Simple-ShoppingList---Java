@@ -5,6 +5,7 @@ import UI.table.CategoryTableModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class CategoryPanel extends JPanel {
 
@@ -41,5 +42,16 @@ public class CategoryPanel extends JPanel {
         int modelRow = table.convertRowIndexToModel(row);
 
         return (String) tableModel.getValueAt(modelRow, 0);
+    }
+
+    public void onCategorySelected(Consumer<String> callback) {
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) return;
+
+            String selected = getSelectedCategory();
+            if (selected != null) {
+                callback.accept(selected);
+            }
+        });
     }
 }

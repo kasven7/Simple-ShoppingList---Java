@@ -111,4 +111,15 @@ public class ProductCategory {
             return 0;
         }
     }
+
+    public Integer getIdByName(String categoryName) {
+        String sql = "SELECT id FROM product_category WHERE name='" + categoryName + "'";
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) return rs.getInt("id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

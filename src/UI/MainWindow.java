@@ -5,12 +5,14 @@ import UI.dialogs.AddCategoryDialog;
 import UI.dialogs.EditCategoryDialog;
 import UI.menu.MainMenuBar;
 import UI.panels.CategoryPanel;
+import UI.panels.ProductPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
     private CategoryPanel categoryPanel;
+    private ProductPanel productPanel;
     private MainMenuBar menuBar;
     private BottomStatusBar statusBar;
 
@@ -36,7 +38,26 @@ public class MainWindow extends JFrame {
         // po starcie ustaw stan menu
         updateMenuState();
 
-        add(categoryPanel, BorderLayout.CENTER);
+        categoryPanel = new CategoryPanel(AppContext.getProductCategory());
+        productPanel = new ProductPanel(AppContext.getProduct());
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, categoryPanel, productPanel);
+        splitPane.setDividerLocation(300); // lewa część ~300px
+        splitPane.setResizeWeight(0.35);   // proporcja: 35% / 65%
+
+        add(splitPane, BorderLayout.CENTER);
+
+        categoryPanel.onCategorySelected(categoryName -> {
+            Integer categoryId = AppContext.getProductCategory().getIdByName(categoryName);
+            if (categoryId != null) {
+                productPanel.loadProductsForCategory(categoryId);
+                setStatus("📂 Wybrano kategorię: " + categoryName);
+            } else {
+                productPanel.clear();
+                setStatus("⚠️ Nie znaleziono ID dla kategorii: " + categoryName);
+            }
+        });
+
         statusBar = new BottomStatusBar();
         add(statusBar, BorderLayout.SOUTH);
     }

@@ -2,6 +2,7 @@ package UI;
 
 import Database.DBProperties;
 import Database.DatabaseConfig;
+import Model.Product;
 import Model.ProductCategory;
 
 import java.sql.Connection;
@@ -12,6 +13,7 @@ public class AppContext {
 
     private static Connection connection;
     private static ProductCategory productCategory;
+    private static Product product;
 
     // Inicjalizacja połączenia
     public static void init() {
@@ -28,6 +30,7 @@ public class AppContext {
             System.out.println("✅ Połączenie udane!");
 
             productCategory = new ProductCategory(connection);
+            product = new Product(connection);
 
         } catch (SQLException e) {
             System.out.println("❌ Błąd połączenia: " + e.getMessage());
@@ -41,4 +44,6 @@ public class AppContext {
     public static ProductCategory getProductCategory() {
         return productCategory;
     }
+
+    public static Product getProduct() { return product; }
 }
