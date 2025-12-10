@@ -8,7 +8,8 @@ import java.awt.event.KeyEvent;
 public class MainMenuBar extends JMenuBar {
 
     public MainMenuBar(ActionListener onAddCategory,
-                       ActionListener onEditCategory) {
+                       ActionListener onEditCategory,
+                       ActionListener onDeleteCategory) {
 
         int shortcutKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
@@ -32,6 +33,11 @@ public class MainMenuBar extends JMenuBar {
         editItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, shortcutKey));
         editItem.addActionListener(onEditCategory);
         operationsMenu.add(editItem);
+
+        JMenuItem deleteItem = new JMenuItem("Usuń kategorię");
+        deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, shortcutKey)); // ⌘⌫ / Ctrl+Backspace
+        deleteItem.addActionListener(onDeleteCategory);
+        operationsMenu.add(deleteItem);
 
         add(fileMenu);
         add(operationsMenu);

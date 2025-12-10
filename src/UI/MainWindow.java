@@ -25,7 +25,8 @@ public class MainWindow extends JFrame {
         // Menu z akcją
         setJMenuBar(new MainMenuBar(
                 e -> openAddCategoryDialog(),
-                e -> openEditCategoryDialog()
+                e -> openEditCategoryDialog(),
+                e -> deleteSelectedCategory()
         ));
 
         add(categoryPanel, BorderLayout.CENTER);
@@ -53,4 +54,31 @@ public class MainWindow extends JFrame {
                 () -> categoryPanel.reload()
         ).setVisible(true);
     }
+
+    private void deleteSelectedCategory() {
+        String selected = categoryPanel.getSelectedCategory();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(this, "Najpierw wybierz kategorię z tabeli!");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Na pewno usunąć kategorię: \"" + selected + "\"?",
+                "Potwierdź usunięcie",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (confirm != JOptionPane.OK_OPTION) return;
+
+        int result = AppContext.getProductCategory().deleteRecord(selected);
+
+        if (result > 0) {
+            categoryPanel.reload();
+        } else {
+            JOptionPane.showMessageDialog(this, "Nie znaleziono kategorii lub nie udało się usunąć.");
+        }
+    }
+
 }
