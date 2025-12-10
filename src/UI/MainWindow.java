@@ -1,6 +1,7 @@
 package UI;
 
 import UI.dialogs.AddCategoryDialog;
+import UI.dialogs.EditCategoryDialog;
 import UI.menu.MainMenuBar;
 import UI.panels.CategoryPanel;
 
@@ -22,7 +23,10 @@ public class MainWindow extends JFrame {
         categoryPanel = new CategoryPanel(AppContext.getProductCategory());
 
         // Menu z akcją
-        setJMenuBar(new MainMenuBar(e -> openAddCategoryDialog()));
+        setJMenuBar(new MainMenuBar(
+                e -> openAddCategoryDialog(),
+                e -> openEditCategoryDialog()
+        ));
 
         add(categoryPanel, BorderLayout.CENTER);
     }
@@ -31,6 +35,21 @@ public class MainWindow extends JFrame {
         new AddCategoryDialog(
                 this,
                 AppContext.getProductCategory(),
+                () -> categoryPanel.reload()
+        ).setVisible(true);
+    }
+
+    private void openEditCategoryDialog() {
+        String selected = categoryPanel.getSelectedCategory();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(this, "Najpierw wybierz kategorię z tabeli!");
+            return;
+        }
+
+        new EditCategoryDialog(
+                this,
+                AppContext.getProductCategory(),
+                selected,
                 () -> categoryPanel.reload()
         ).setVisible(true);
     }

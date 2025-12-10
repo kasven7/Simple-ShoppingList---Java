@@ -7,7 +7,8 @@ import java.awt.event.KeyEvent;
 
 public class MainMenuBar extends JMenuBar {
 
-    public MainMenuBar(ActionListener onAddCategory) {
+    public MainMenuBar(ActionListener onAddCategory,
+                       ActionListener onEditCategory) {
 
         int shortcutKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
@@ -24,8 +25,13 @@ public class MainMenuBar extends JMenuBar {
 
         JMenuItem addItem = new JMenuItem("Dodaj kategorię");
         addItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, shortcutKey));
-        addItem.addActionListener(onAddCategory);   // <-- WAŻNE!
+        addItem.addActionListener(onAddCategory);
         operationsMenu.add(addItem);
+
+        JMenuItem editItem = new JMenuItem("Edytuj kategorię");
+        editItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, shortcutKey));
+        editItem.addActionListener(onEditCategory);
+        operationsMenu.add(editItem);
 
         add(fileMenu);
         add(operationsMenu);

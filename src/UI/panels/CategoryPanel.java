@@ -28,4 +28,14 @@ public class CategoryPanel extends JPanel {
     public void reload() {
         tableModel.loadData();
     }
+
+    public String getSelectedCategory() {
+        int row = table.getSelectedRow();
+        if (row == -1) return null;
+
+        // Jeśli sorter jest aktywny, trzeba konwertować index
+        int modelRow = table.convertRowIndexToModel(row);
+
+        return (String) tableModel.getValueAt(modelRow, 0);
+    }
 }
