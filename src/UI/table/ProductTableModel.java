@@ -25,6 +25,11 @@ public class ProductTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public Product getProductAt(int rowIndex)
+    {
+        return products.get(rowIndex);
+    }
+
     @Override
     public int getRowCount() {
         return products.size();
@@ -32,7 +37,7 @@ public class ProductTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 2; // name + createdAt (można zwiększyć)
+        return 2;
     }
 
     @Override

@@ -11,39 +11,35 @@ import java.sql.SQLException;
 
 public class AppContext {
 
-    private static Connection connection;
-    private static ProductCategory productCategory;
-    private static Product product;
+	private static Connection connection;
+	private static ProductCategory productCategory;
+	private static Product product;
 
-    // Inicjalizacja połączenia
-    public static void init() {
-        DatabaseConfig.createConfigFile();
-        DatabaseConfig.readConfigFile();
+	public static void init() {
+		DatabaseConfig.createConfigFile();
+		DatabaseConfig.readConfigFile();
 
-        try {
-            connection = DriverManager.getConnection(
-                    DBProperties.getUrl(),
-                    DBProperties.getUser(),
-                    DBProperties.getPassword()
-            );
+		try {
+			connection = DriverManager.getConnection(
+					DBProperties.getUrl(),
+					DBProperties.getUser(),
+					DBProperties.getPassword()
+			);
+			System.out.println("✅ Połączenie udane!");
+		} catch (SQLException e) {
+			System.out.println("❌ Błąd połączenia: " + e.getMessage());
+			connection = null;
+		}
 
-            System.out.println("✅ Połączenie udane!");
+		productCategory = new ProductCategory(connection);
+		product = new Product(connection);
+	}
 
-            productCategory = new ProductCategory(connection);
-            product = new Product(connection);
+	public static ProductCategory getProductCategory() {
+		return productCategory;
+	}
 
-        } catch (SQLException e) {
-            System.out.println("❌ Błąd połączenia: " + e.getMessage());
-        }
-    }
-
-    public static Connection getConnection() {
-        return connection;
-    }
-
-    public static ProductCategory getProductCategory() {
-        return productCategory;
-    }
-
-    public static Product getProduct() { return product; }
+	public static Product getProduct() {
+		return product;
+	}
 }
